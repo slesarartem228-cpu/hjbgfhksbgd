@@ -1,7 +1,7 @@
 const story = [
     {
         background: "https://yandex.ru/images/search?pos=3&from=tabbar&img_url=https%3A%2F%2Fwww.slamdunk.ru%2Fuploads%2Fmonthly_2019_05%2Ffile-20170629-16091-1wjxdp5.jpg.9f179bfe5531455a5da700e2b5e69c29.jpg&text=задний+фон+помойка&rpt=simage&lr=62",
-        character: "https://yandex.ru/images/search?text=%2Cjv%3B+rfhnbyrf&pos=2&rpt=simage&img_url=http%3A%2F%2Fi.pinimg.com%2F736x%2F20%2Fa6%2F31%2F20a6316c2992912f6fc636e38f3f3335.jpg&from=tabbar&lr=62",
+        character: "https://images.meme-arsenal.com/b8831224203c5e7f44f14c3bde930bdf.jpg",
         speaker: "bomj",
         text: "мусорная помойка с бомжом",
 
@@ -12,6 +12,23 @@ const story = [
             },
             {
                 text: "го дратся за денешки или струсил",
+                next: 2
+            }
+        ]
+    },
+    {
+        background: "https://yandex.ru/images/search?pos=3&from=tabbar&img_url=https%3A%2F%2Fwww.slamdunk.ru%2Fuploads%2Fmonthly_2019_05%2Ffile-20170629-16091-1wjxdp5.jpg.9f179bfe5531455a5da700e2b5e69c29.jpg&text=задний+фон+помойка&rpt=simage&lr=62",
+        character: "https://images.meme-arsenal.com/b8831224203c5e7f44f14c3bde930bdf.jpg",
+        speaker: "bomj",
+        text: "мусорная помойка с бомжом",
+
+        choices: [
+            {
+                text: "я хатябы граматнее тибя",
+                next: 1
+            },
+            {
+                text: "Сергей вчера со мной в кроватке переспал",
                 next: 2
             }
         ]
@@ -29,10 +46,10 @@ const choicesElement = document.querySelector('#choices');
 function showScene() {
     const scene = story[currentScene]
 
-    if(scene.background) {
-        sceneElement.style.backgroundImage = `url("${scene.background}")`;
+    if (scene.background) {
+        sceneElement.style.backgroundImage = `url(${scene.background})`;
     }
-    if(scene.character) {
+    if (scene.character) {
         characterElement.src = scene.character;
         characterElement.style.display = "block";
     }
@@ -41,7 +58,13 @@ function showScene() {
     }
 
     speakerElement.textContent = scene.speaker;
-    textElement.textContent = scene.text;
+    textElement.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+        textElement.textContent += scene.text[i++];
+        if (i >= scene.text.length) clearInterval(timer);
+    }, 30); 
+
 
     choicesElement.innerHTML = "";
 
@@ -51,11 +74,10 @@ function showScene() {
         button.textContent = choice.text;
 
         button.addEventListener("click", () => {
-            currentScene = choice.text;
+            currentScene = choice.next;
             showScene();
-        })
+        });
         choicesElement.appendChild(button);
     })
-
 }
 showScene();
